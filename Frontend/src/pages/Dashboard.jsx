@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 
 const Dashboard = () => {
   const [users, setUsers] = useState([]);
+  const [connectedUsers, setConnectedUsers] = useState([]);
 
   useEffect(() => {
     fetchUsers();
@@ -9,17 +10,18 @@ const Dashboard = () => {
 
   const fetchUsers = async () => {
     try {
-      const response = await fetch(
-        "http://localhost:5000/api/users"
-      );
+      const response = await fetch("http://localhost:5000/api/users");
 
       const data = await response.json();
-      console.log(data);
 
       setUsers(data);
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const handleConnect = (id) => {
+    setConnectedUsers([...connectedUsers, id]);
   };
 
   return (
@@ -30,8 +32,20 @@ const Dashboard = () => {
         {users.map((user) => (
           <div key={user._id} className="user-card">
             <h2>{user.name}</h2>
-            <p>{user.email}</p>
-            <p>Skill: {user.skill}</p>
+
+            <div className="skills-container">
+              {user.skill.split(",").map((skill, index) => (
+                <span key={index} className="skill-tag">
+                  {skill.trim()}
+                </span>
+              ))}
+            </div>
+
+            {connectedUsers.includes(user._id) ? (
+              <button className="connected-btn">Requested ✅</button>
+            ) : (
+              <button onClick={() => handleConnect(user._id)}>Connect</button>
+            )}
           </div>
         ))}
       </div>
