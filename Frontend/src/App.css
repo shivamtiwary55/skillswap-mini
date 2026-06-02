@@ -45,7 +45,7 @@ button {
 }
 
 button:hover {
-  opacity: 0.9;
+  opacity: 0.10;
 }
 
 /* Home Page */
@@ -114,6 +114,7 @@ input:focus {
 
 .users-grid {
   display: flex;
+  
   gap: 25px;
   flex-wrap: wrap;
   justify-content: center;
@@ -127,6 +128,9 @@ input:focus {
   min-height: 220px;
 
   background: white;
+  background-color: #3a33b8;
+  text-transform: uppercase;
+
   padding: 25px;
 
   border-radius: 16px;
@@ -137,7 +141,7 @@ input:focus {
   justify-content: center;
   align-items: center;
 
-  text-align: center;
+  text-align: left;
 
   transition: transform 0.3s ease;
 }
