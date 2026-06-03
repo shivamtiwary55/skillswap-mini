@@ -36,8 +36,7 @@ app.post("/api/register", async (req, res) => {
     await user.save();
 
     res.json({
-      message:
-        "User registered successfully 😎",
+      message: "User registered successfully 😎",
     });
   } catch (error) {
     console.log(error);
@@ -63,8 +62,40 @@ app.get("/api/users", async (req, res) => {
   }
 });
 
+// Login route
+app.post("/api/login", async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    const user = await User.findOne({
+      email,
+    });
+
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+      });
+    }
+
+    if (user.password !== password) {
+      return res.status(400).json({
+        message: "Wrong password",
+      });
+    }
+
+    res.json({
+      message: "Login successful 😎",
+      user,
+    });
+  } catch (error) {
+    console.log(error);
+
+    res.status(500).json({
+      message: "Something went wrong",
+    });
+  }
+});
+
 app.listen(PORT, () => {
-  console.log(
-    `Server running on port ${PORT}`
-  );
+  console.log(`Server running on port ${PORT}`);
 });

@@ -1,12 +1,44 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
-  const handleLogin = () => {
-    console.log(email);
-    console.log(password);
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleLogin = async () => {
+    console.log(formData);
+    try {
+      const response = await fetch("http://localhost:5000/api/login", {
+        method: "POST",
+
+        headers: {
+          "Content-Type": "application/json",
+        },
+
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      alert(data.message);
+
+      if (response.ok) {
+        navigate("/dashboard");
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -15,21 +47,19 @@ const Login = () => {
 
       <input
         type="email"
+        name="email"
         placeholder="Enter email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
+        onChange={handleChange}
       />
 
       <input
         type="password"
+        name="password"
         placeholder="Enter password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
+        onChange={handleChange}
       />
 
-      <button onClick={handleLogin}>
-        Login
-      </button>
+      <button onClick={handleLogin}>Login</button>
     </div>
   );
 };
